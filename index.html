@@ -24,29 +24,32 @@
     <div id="content">Welcome! Click a link above.</div>
 
     <script>
+        const BASE_URL = "/Misa_and_N0ble/";
+
         function loadPage(page) {
-            fetch(`${page}.html`) // Load content from the correct HTML file
+            fetch(`${BASE_URL}${page}.html`) // Load content from the correct HTML file
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById('content').innerHTML = data;
-                    history.pushState({ page }, "", `/${page}`); // Update the URL in the browser
+                    history.pushState({ page }, "", `${BASE_URL}${page}`); // Update the URL without #
                 })
                 .catch(() => {
                     document.getElementById('content').innerHTML = "<h2>Page not found</h2>";
                 });
         }
-    
+
         // On page load, check the URL and load the correct content
         window.onload = function () {
-            const page = location.pathname.substring(1) || "home"; // Get page from URL
+            const page = location.pathname.replace(BASE_URL, "") || "home"; // Get page from URL
             loadPage(page);
         };
-    
-        // Handle back/forward navigation
+
+        // Handle browser back/forward navigation
         window.onpopstate = function (event) {
             loadPage(event.state?.page || "home");
         };
     </script>
+
     
     
     
