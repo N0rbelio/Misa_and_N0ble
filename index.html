@@ -68,21 +68,15 @@
             loaderOverlay.style.display = "flex"; // Show full-screen loader
             content.innerHTML = ""; // Clear content before loading
 
-            // Determine the file to load based on the page (handle "home" separately)
-            let fileToFetch = `${page}.html`;
-            if (page === "home") {
-                fileToFetch = "index.html"; // When loading home, load index.html
-            }
-
             // Fetch page content from the correct path
-            fetch(`${BASE_URL}${fileToFetch}`)
+            fetch(`${BASE_URL}${page}.html`)
                 .then(response => response.text())
                 .then(data => {
                     setTimeout(() => { // Add 5-second delay before showing content
                         content.innerHTML = data;
-                        history.pushState({ page }, "", `${BASE_URL}${page}`);
+                        history.pushState({ page }, "", `${BASE_URL}${page}`); // Update URL without reloading
                         loaderOverlay.style.display = "none"; // Hide loader after loading
-                    }, 5000); // 5000ms = 5 seconds
+                    }, 1000); // 5000ms = 5 seconds
                 })
                 .catch(() => {
                     setTimeout(() => {
