@@ -16,26 +16,24 @@
     <h1>Simple SPA on GitHub Pages</h1>
 
     <nav>
-        <a onclick="loadPage('home')">Home</a>
-        <a onclick="loadPage('about')">About</a>
-        <a onclick="loadPage('contact')">Contact</a>
+        <a onclick="loadPage('home.html')">Home</a>
+        <a onclick="loadPage('about.html')">About</a>
+        <a onclick="loadPage('contact.html')">Contact</a>
     </nav>
 
     <div id="content">Welcome! Click a link above.</div>
 
     <script>
         function loadPage(page) {
-            const contentDiv = document.getElementById('content');
-            const pages = {
-                home: "<h2>Home Page</h2><p>Welcome to the Home page!</p>",
-                about: "<h2>About Page</h2><p>This is a simple single-page app (SPA).</p>",
-                contact: "<h2>Contact Page</h2><p>Contact us at example@example.com</p>"
-            };
-
-            contentDiv.innerHTML = pages[page] || "<h2>Page not found</h2>";
-
-            // Update URL without reloading (for GitHub Pages)
-            history.pushState({ page }, "", `#${page}`);
+            fetch(page)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('content').innerHTML = data;
+                    history.pushState({ page }, "", `${page}`); // Update URL without reload
+                })
+                .catch(() => {
+                    document.getElementById('content').innerHTML = "<h2>Page not found</h2>";
+                });
         }
 
         // Load page from URL on refresh
