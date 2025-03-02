@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        var path = window.location.pathname.split("/").pop(); // Get the last part of the URL
+        if (path === "") path = "home"; // Default to home page
+        window.location.replace("/?" + path); // Redirect with query string
+    </script>
+</head>
+<body>
+    <p>Redirecting...</p>
+</body>
+</html>
