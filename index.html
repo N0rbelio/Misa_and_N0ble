@@ -16,33 +16,33 @@
     <h1>Simple SPA on GitHub Pages</h1>
 
     <nav>
-        <a onclick="loadPage('home.html')">Home</a>
-        <a onclick="loadPage('about.html')">About</a>
-        <a onclick="loadPage('contact.html')">Contact</a>
+        <a onclick="loadPage('home')">Home</a>
+        <a onclick="loadPage('about')">About</a>
+        <a onclick="loadPage('contact')">Contact</a>
     </nav>
 
     <div id="content">Welcome! Click a link above.</div>
 
     <script>
         function loadPage(page) {
-            fetch(page)
+            fetch(`${page}.html`) // Load the correct HTML file
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById('content').innerHTML = data;
-                    history.pushState({ page }, "", `${page}`); // Update URL without reload
+                    history.pushState({ page }, "", `#${page}`); // Update URL using #
                 })
                 .catch(() => {
                     document.getElementById('content').innerHTML = "<h2>Page not found</h2>";
                 });
         }
 
-        // Load page from URL on refresh
+        // Load the correct page from URL when refreshing
         window.onload = function () {
-            const page = window.location.hash.substring(1) || "home";
+            const page = window.location.hash.substring(1) || "home"; // Use default home
             loadPage(page);
         };
 
-        // Handle back/forward navigation
+        // Handle browser back/forward navigation
         window.onpopstate = function (event) {
             loadPage(event.state?.page || "home");
         };
