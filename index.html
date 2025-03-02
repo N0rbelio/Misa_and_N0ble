@@ -5,10 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple SPA on GitHub Pages</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
+        body { font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 0; }
         nav { margin: 20px; }
         nav a { margin: 0 15px; cursor: pointer; text-decoration: underline; }
-        #content { margin-top: 20px; padding: 20px; border: 1px solid #ddd; }
+        #content { margin-top: 20px; padding: 20px; min-height: 100vh; background: white; }
+
+        /* Full-Screen Loader */
+        .loader-overlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent gray */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -21,38 +50,53 @@
         <a onclick="loadPage('contact')">Contact</a>
     </nav>
 
+    <!-- Full-Screen Loader -->
+    <div id="loader-overlay" class="loader-overlay">
+        <div class="loader"></div>
+    </div>
+
     <div id="content">Welcome! Click a link above.</div>
 
     <script>
-        const BASE_URL = "/Misa_and_N0ble/";
+        // Dynamically set the base URL based on whether we are on GitHub Pages or local
+        const BASE_URL = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' ? "" : "/Misa_and_N0ble/";
 
         function loadPage(page) {
-            fetch(`${BASE_URL}${page}.html`) // Load content from the correct HTML file
+            const loaderOverlay = document.getElementById('loader-overlay');
+            const content = document.getElementById('content');
+
+            loaderOverlay.style.display = "flex"; // Show full-screen loader
+            content.innerHTML = ""; // Clear content before loading
+
+            // Fetch page content from the correct path
+            fetch(`${BASE_URL}${page}.html`)
                 .then(response => response.text())
                 .then(data => {
-                    document.getElementById('content').innerHTML = data;
-                    history.pushState({ page }, "", `${BASE_URL}${page}`); // Update the URL without #
+                    setTimeout(() => { // Add 5-second delay before showing content
+                        content.innerHTML = data;
+                        history.pushState({ page }, "", `${BASE_URL}${page}`); // Update URL without reloading
+                        loaderOverlay.style.display = "none"; // Hide loader after loading
+                    }, 1000); // 5000ms = 5 seconds
                 })
                 .catch(() => {
-                    document.getElementById('content').innerHTML = "<h2>Page not found</h2>";
+                    setTimeout(() => {
+                        content.innerHTML = "<h2>Page not found</h2>";
+                        loaderOverlay.style.display = "none";
+                    }, 5000);
                 });
         }
 
         // On page load, check the URL and load the correct content
         window.onload = function () {
-            const page = location.pathname.replace(BASE_URL, "") || "home"; // Get page from URL
+            const page = location.pathname.replace(BASE_URL, "").replace(/\/$/, "") || "home";
             loadPage(page);
         };
 
-        // Handle browser back/forward navigation
+        // Handle back/forward navigation
         window.onpopstate = function (event) {
             loadPage(event.state?.page || "home");
         };
     </script>
-
-    
-    
-    
 
 </body>
 </html>
