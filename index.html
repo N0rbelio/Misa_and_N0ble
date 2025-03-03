@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./nav.css">
     <title>Simple SPA on GitHub Pages</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 0; }
-        nav { margin: 20px; }
-        nav a { margin: 0 15px; cursor: pointer; text-decoration: underline; }
-        #content { margin-top: 20px; padding: 20px; min-height: 100vh; background: white; }
+
 
         /* Full-Screen Loader */
         .loader-overlay {
@@ -41,15 +40,26 @@
     </style>
 </head>
 <body>
-
-    <h1>Simple SPA on GitHub Pages</h1>
-
-    <nav>
+    <!--<nav>
         <a onclick="loadPage('home')">Home</a>
         <a onclick="loadPage('about')">About</a>
         <a onclick="loadPage('contact')">Contact</a>
-    </nav>
-
+    </nav>-->
+    <nav>
+        <a class="item" onclick="loadPage('home')">Home</a>
+        <a class="item" onclick="loadPage('about')">About</a>
+        <div class="item"onclick="loadPage('contact')">Contact</a>
+          <div class="dropdown">
+            <div>
+              <a>React</a>
+              <a>Angular</a>
+              <a>Vue</a>
+            </div>
+          </div>
+        </div>
+        <a class="item">Contact</a>
+        <div class="underline"></div>
+      </nav>
     <!-- Full-Screen Loader -->
     <div id="loader-overlay" class="loader-overlay">
         <div class="loader"></div>
