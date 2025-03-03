@@ -1,24 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <head>
-        <script>
-            (function() {
-                // Extract the requested path after the base URL
-                var path = window.location.pathname.replace('/Misa_and_N0ble/', '');
-    
-                // If there's no path, default to 'home'
-                if (!path || path === '/') {
-                    path = 'home';
-                }
-    
-                // Redirect to index.html but keep the correct page
-                window.location.replace('/Misa_and_N0ble/index.html?page=' + path);
-            })();
-        </script>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0; url=/Misa_and_N0ble/index.html?page=home">
+    <script>
+        (function() {
+            var path = window.location.pathname.replace('/Misa_and_N0ble/', '');
+            if (!path || path === '/') {
+                path = 'home'; // Default to home
+            }
+            window.location.replace('/Misa_and_N0ble/index.html?page=' + path);
+        })();
+    </script>
 </head>
 <body>
-    <p>Page 404!</p>
-    <a href="./home.html">Go back to Home</a>
+    <p>Redirecting...</p>
 </body>
 </html>

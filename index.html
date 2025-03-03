@@ -72,37 +72,46 @@
         // Dynamically set the base URL based on whether we are on GitHub Pages or local
         const BASE_URL = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' ? "" : "/Misa_and_N0ble/";
 
-        function loadPage(page) {
-            const loaderOverlay = document.getElementById('loader-overlay');
-            const content = document.getElementById('content');
-
-            loaderOverlay.style.display = "flex"; // Show full-screen loader
-            content.innerHTML = ""; // Clear content before loading
-
-            // Fetch page content from the correct path
-            fetch(`${BASE_URL}${page}.html`)
-                .then(response => response.text())
-                .then(data => {
-                    setTimeout(() => { // Add 5-second delay before showing content
-                        content.innerHTML = data;
-                        history.pushState({ page }, "", `${BASE_URL}${page}`); // Update URL without reloading
-                        loaderOverlay.style.display = "none"; // Hide loader after loading
-                    }, 1000); // 5000ms = 5 seconds
-                })
-                .catch(() => {
-                    setTimeout(() => {
-                        content.innerHTML = "<h2>Page not found</h2>";
-                        loaderOverlay.style.display = "none";
-                    }, 5000);
-                });
-        }
-
         // On page load, check the URL and load the correct content
         window.onload = function () {
             const urlParams = new URLSearchParams(window.location.search);
             const page = urlParams.get("page") || "home";  // Get page from query parameter
             loadPage(page);
         };
+
+        function loadPage(page) {
+            const loaderOverlay = document.getElementById('loader-overlay');
+            const content = document.getElementById('content');
+        
+            loaderOverlay.style.display = "flex"; // Show full-screen loader
+            content.innerHTML = ""; // Clear content before loading
+        
+            // Adjust BASE_URL dynamically based on environment
+            const BASE_URL = window.location.hostname.includes("github.io") ? "/Misa_and_N0ble/" : "/";
+        
+            let fileToFetch = `${BASE_URL}${page}.html`;
+        
+            fetch(fileToFetch)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Page not found");
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    setTimeout(() => {
+                        content.innerHTML = data;
+                        history.pushState({ page }, "", `?page=${page}`); // Update URL without reload
+                        loaderOverlay.style.display = "none"; // Hide loader after loading
+                    }, 1000);
+                })
+                .catch(() => {
+                    setTimeout(() => {
+                        content.innerHTML = "<h2>Page not found</h2>";
+                        loaderOverlay.style.display = "none";
+                    }, 1000);
+                });
+        }
 
         // Handle back/forward navigation
         window.onpopstate = function (event) {
