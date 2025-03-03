@@ -3,9 +3,18 @@
 <head>
     <head>
         <script>
-            var path = window.location.pathname.replace("/Misa_and_N0ble/", ""); // Get the correct page
-            if (path === "") path = "home"; // Default to home page
-            window.location.replace("/Misa_and_N0ble/?" + path); // Redirect with query string
+            (function() {
+                // Extract the requested path after the base URL
+                var path = window.location.pathname.replace('/Misa_and_N0ble/', '');
+    
+                // If there's no path, default to 'home'
+                if (!path || path === '/') {
+                    path = 'home';
+                }
+    
+                // Redirect to index.html but keep the correct page
+                window.location.replace('/Misa_and_N0ble/index.html?page=' + path);
+            })();
         </script>
 </head>
 <body>

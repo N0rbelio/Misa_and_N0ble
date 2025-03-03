@@ -40,6 +40,7 @@
     </style>
 </head>
 <body>
+
     <!--<nav>
         <a onclick="loadPage('home')">Home</a>
         <a onclick="loadPage('about')">About</a>
@@ -98,7 +99,8 @@
 
         // On page load, check the URL and load the correct content
         window.onload = function () {
-            const page = location.pathname.replace(BASE_URL, "").replace(/\/$/, "") || "home";
+            const urlParams = new URLSearchParams(window.location.search);
+            const page = urlParams.get("page") || "home";  // Get page from query parameter
             loadPage(page);
         };
 
